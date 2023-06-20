@@ -217,4 +217,40 @@ class PegawaiController extends Controller
         Excel::import(new PegawaiImport, public_path('/file_excel/'.$nama_file));
         return redirect('admin/pegawai');
     }
+
+    public function apiPegawai(){
+        $pegawai = Pegawai::all();
+        return response() -> json(
+            [
+                'succes' => 'true',
+                'message' => 'Data Pegawai',
+                'data' => $pegawai
+            ], 200
+        );
+    }
+
+    public function apiPegawaiDetail($id){
+        $pegawai = Pegawai::join('divisi', 'pegawai.divisi_id', '=', 'divisi.id')
+        -> join('jabatan', 'pegawai.jabatan_id', '=', 'jabatan.id')
+        -> select('pegawai.*', 'divisi.nama as divisi', 'jabatan.nama as jabatan')
+        -> where('pegawai.id'. $id)
+        -> get();
+
+        if($pegawai){
+            return response() -> json(
+                [
+                    'succes' => 'true',
+                    'message' => 'Data Pegawai',
+                    'data' => $pegawai
+                ], 200
+            );
+        } else{
+            return response() -> json(
+                [
+                    'succses' => false,
+                    'message' => 'Pegawai Tidak Ditemukan',
+                ], 400
+            );
+        }
+    }
 }

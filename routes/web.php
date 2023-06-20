@@ -8,6 +8,9 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FrontController;
+use App\Http\Controllers\PelatihanController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +22,13 @@ use App\Http\Controllers\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+// Route untuk halaman depan
+Route::get ('/', function(){
+    return view('front');
+});
+
+Route::get('/pelatihan', [PelatihanController::class, 'index'])->middleware('auth');
 
 Route::get('/', function () {
     Alert::success('Selamat Datang');
@@ -72,5 +82,10 @@ Route::get('user', [UserController::class, 'index']);
 });
 });
 Auth::routes();
+// Route::get('/after_register', 'function'(){
+//     return view('after_register');
+// });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/pegawaiapi', [PegawaiController::class, 'apiPegawai']);
+Route::get('/pegawaiapi/{id}', [PegawaiController::class, 'apiPegawaiDetail']);
